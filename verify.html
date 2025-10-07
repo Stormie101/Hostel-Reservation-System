@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Verification</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .verify-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .logo img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px;
+    }
+
+    .verify-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .return-link {
+      display: block;
+      margin-bottom: 30px;
+      color: #004aad;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .enter-btn {
+      background-color: #000;
+      color: #fff;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .enter-btn:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="verify-container">
+    <div class="logo">
+      <img src="IMG/uptm logo.png" alt="UPTM Logo">
+    </div>
+    <div class="verify-title">a code has been emailed to you!</div>
+    <a href="login.html" class="return-link">Return To Login Page</a>
+    <form>
+      <input type="text" placeholder="INSERT CODE" required />
+      <button type="submit" class="enter-btn">Enter</button>
+    </form>
+  </div>
+</body>
+</html>

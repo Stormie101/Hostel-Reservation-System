@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPTM Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .logo img {
+  max-width: 80%;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+
+    .login-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .create-link {
+      display: block;
+      margin-bottom: 30px;
+      color: #004aad;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .signup-btn {
+      background-color: #000;
+      color: #fff;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .signup-btn:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo"><img src="IMG/uptm logo.png" alt=""></div>
+    <div class="login-title">Login</div>
+    <a href="signup.html" class="create-link">Create New User</a>
+    <form>
+      <input type="text" placeholder="NAME" required />
+      <input type="email" placeholder="EMAIL" required />
+      <input type="password" placeholder="PASSWORD" required />
+      <button type="submit" class="signup-btn">Log In</button>
+    </form>
+    <a href="forgot.html" class="create-link" style="margin-top: 25px;">Forgot Password?</a>
+  </div>
+</body>
+</html>
