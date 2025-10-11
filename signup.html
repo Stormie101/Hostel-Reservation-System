@@ -72,6 +72,24 @@
     .create-btn:hover {
       background-color: #333;
     }
+    select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20viewBox%3D%220%200%2010%207%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%207%205-7z%22%20fill%3D%22%23333%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 7px;
+}
+
   </style>
 </head>
 <body>
@@ -81,13 +99,71 @@
     </div>
     <div class="create-title">Create New User</div>
     <a href="login.html" class="return-link">Return To Login Page</a>
-    <form>
-      <input type="text" placeholder="NAME" required />
-      <input type="password" placeholder="PASSWORD" required />
-      <input type="email" placeholder="EMAIL" required />
-      <input type="password" placeholder="CONFIRMED PASSWORD" required />
-      <button type="submit" class="create-btn">Create</button>
-    </form>
+<form action="backend/signup.php" method="POST">
+  <input type="text" name="username" placeholder="NAME" required />
+  <input type="password" name="password" placeholder="PASSWORD" required />
+  <input type="email" name="email" placeholder="EMAIL" required />
+  <input type="password" name="confirm_password" placeholder="CONFIRMED PASSWORD" required />
+
+  <!-- Role Selector -->
+  <select name="role" id="roleSelect" required>
+    <option value="" disabled selected>Select Role</option>
+    <option value="Staff">Staff</option>
+    <option value="Student">Student</option>
+  </select>
+
+  <!-- Student-specific fields -->
+  <div id="studentFields" style="display: none;">
+  <input type="text" name="student_id" placeholder="Student ID" />
+
+  <select name="programme" >
+  <option value="" disabled selected>Select Programme</option>
+  <option value="Diploma of Accountancy (AA103)">Diploma of Accountancy (AA103)</option>
+  <option value="Diploma in Computer Science (CC101)">Diploma in Computer Science (CC101)</option>
+  <option value="Diploma in Corporate Communication (BK101)">Diploma in Corporate Communication (BK101)</option>
+  <option value="Foundation in Arts (FA001)">Foundation in Arts (FA001)</option>
+  <option value="Foundation in Commerce (FC001)">Foundation in Commerce (FC001)</option>
+  <option value="Foundation in Information Technology (FT001)">Foundation in Information Technology (FT001)</option>
+  <option value="Bachelor of Accountancy (Honours) (AA201)">Bachelor of Accountancy (Honours) (AA201)</option>
+  <option value="Bachelor of Arts (Honours) in Applied English Language Studies (BE201)">BA in Applied English Language Studies (BE201)</option>
+  <option value="Bachelor of Arts in 3D Animation and Digital Media (Honours) (CM201)">BA in 3D Animation & Digital Media (CM201)</option>
+  <option value="Bachelor of Business Administration (Honours) - HRM (AB201)">BBA - Human Resource Management (AB201)</option>
+  <option value="Bachelor of Early Childhood Education (Honours) (BE202)">Bachelor of Early Childhood Education (BE202)</option>
+  <option value="Bachelor of IT (Honours) in Computer Application Development (CT204)">BIT in App Development (CT204)</option>
+  <option value="Bachelor of IT (Honours) in Cyber Security (CT206)">BIT in Cyber Security (CT206)</option>
+  <option value="Bachelor of Communication (Honours) in Corporate Communication (BK201)">Bachelor of Communication (BK201)</option>
+  <option value="Bachelor of Education (Honours) in TESL (B203)">Bachelor of Education in TESL (B203)</option>
+  <option value="MBA (Corporate Admin & Governance)">MBA (Corporate Admin & Governance)</option>
+  <option value="Master of Accountancy">Master of Accountancy</option>
+  <option value="Master of Education (TESL)">Master of Education (TESL)</option>
+  <option value="Doctor of Philosophy in IT">PhD in Information Technology</option>
+  <option value="Doctor of Philosophy in Education">PhD in Education</option>
+</select>
+
+  <select name="gender">
+    <option value="" disabled selected>Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+  </select>
+</div>
+  <button type="submit" class="create-btn">Create</button>
+</form>
+
+
+
   </div>
+  <script>
+  const roleSelect = document.getElementById('roleSelect');
+  const studentFields = document.getElementById('studentFields');
+
+  roleSelect.addEventListener('change', function () {
+    if (this.value === 'Student') {
+      studentFields.style.display = 'block';
+    } else {
+      studentFields.style.display = 'none';
+    }
+  });
+</script>
+
 </body>
 </html>

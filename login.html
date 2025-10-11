@@ -80,12 +80,13 @@
     <div class="logo"><img src="IMG/uptm logo.png" alt=""></div>
     <div class="login-title">Login</div>
     <a href="signup.html" class="create-link">Create New User</a>
-    <form>
-      <input type="text" placeholder="NAME" required />
-      <input type="email" placeholder="EMAIL" required />
-      <input type="password" placeholder="PASSWORD" required />
-      <button type="submit" class="signup-btn">Log In</button>
-    </form>
+<form action="backend/login.php" method="POST">
+  <input type="text" name="username" placeholder="NAME" required />
+  <input type="email" name="email" placeholder="EMAIL" required />
+  <input type="password" name="password" placeholder="PASSWORD" required />
+  <button type="submit" class="signup-btn">Log In</button>
+</form>
+
     <a href="forgot.html" class="create-link" style="margin-top: 25px;">Forgot Password?</a>
   </div>
 </body>
