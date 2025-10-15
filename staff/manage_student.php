@@ -1,4 +1,12 @@
 <?php
+
+session_start();
+
+// Check if staff is logged in
+if (!isset($_SESSION['staff_username']) || !isset($_SESSION['staff_id'])) {
+  header("Location: ../login.html");
+  exit();
+}
 require_once '../connect.php';
 
 $sql = "SELECT r.reservation_id, r.student_id, r.room_id, r.status, s.full_name AS name, rm.room_type

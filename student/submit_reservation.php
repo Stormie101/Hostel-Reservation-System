@@ -1,13 +1,16 @@
 <?php
 session_start();
-require_once '../connect.php';
 
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Student') {
+// Check if student is logged in
+if (!isset($_SESSION['student_id']) || !isset($_SESSION['student_username'])) {
   header("Location: ../login.html");
   exit();
 }
 
-$studentName = $_SESSION['username'];
+require_once '../connect.php';
+
+$studentID = $_SESSION['student_id'];
+$studentName = $_SESSION['student_username'];
 $roomID = $_POST['selected_room'] ?? '';
 $checkIn = $_POST['check_in'] ?? '';
 $checkOut = $_POST['check_out'] ?? '';

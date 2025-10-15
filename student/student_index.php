@@ -1,14 +1,16 @@
 <?php
 session_start();
-require_once '../connect.php';
 
-// Ensure only students can access
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Student') {
+// Check if student is logged in
+if (!isset($_SESSION['student_id']) || !isset($_SESSION['student_username'])) {
   header("Location: ../login.html");
   exit();
 }
 
-$studentName = $_SESSION['username'];
+$studentID = $_SESSION['student_id'];
+$studentName = $_SESSION['student_username'];
+
+require_once '../connect.php';
 
 // Get student_id from students table
 $sqlID = "SELECT student_id FROM students WHERE full_name = ?";

@@ -1,72 +1,82 @@
 <?php
 include '../connect.php';
+require_once 'send_2fa_email.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $username = $_POST['username'];
   $email = $_POST['email'];
   $password = $_POST['password'];
 
-  // Check against staff table
-  $sql = "SELECT * FROM staff WHERE username=? AND email=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $username, $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 1) {
-  $row = $result->fetch_assoc();
-
-  if (!password_verify($password, $row['password'])) {
-    echo "<script>alert('Invalid password'); window.location.href='../login.html';</script>";
-    exit();
-  }
-
-  if ($row['account_status'] !== 'Active') {
-    echo "<script>alert('Your account is not active. Please contact admin.'); window.location.href='../login.html';</script>";
-    exit();
-  }
-
   session_start();
-  $_SESSION['username'] = $username;
-  $_SESSION['role'] = 'Staff';
-  header("Location: ../staff/staff_index.php");
-  exit();
-}
+  session_regenerate_id(true);
 
-  $stmt = $conn->prepare($sql);
+  // Check against staff table
+  $sqlStaff = "SELECT * FROM staff WHERE username=? AND email=?";
+  $stmt = $conn->prepare($sqlStaff);
   $stmt->bind_param("ss", $username, $email);
   $stmt->execute();
   $result = $stmt->get_result();
 
   if ($result->num_rows === 1) {
     $row = $result->fetch_assoc();
-    if (password_verify($password, $row['password'])) {
-      session_start();
-      $_SESSION['username'] = $username;
-      $_SESSION['role'] = 'Staff';
-      header("Location: ../staff/staff_index.php");
+
+    if (!password_verify($password, $row['password'])) {
+      echo "<script>alert('Invalid password'); window.location.href='../login.html';</script>";
       exit();
     }
+
+    if ($row['account_status'] !== 'Active') {
+      echo "<script>alert('Your account is not active. Please contact admin.'); window.location.href='../login.html';</script>";
+      exit();
+    }
+
+    // Generate 2FA code and store in session
+    $code = rand(100000, 999999);
+    $_SESSION['pending_2fa'] = [
+      'user_type' => 'Staff',
+      'id' => $row['staff_id'],
+      'username' => $row['username'],
+      'email' => $row['email'],
+      'account_status' => $row['account_status'],
+      'code' => $code
+    ];
+
+    send2FACode($row['email'], $row['username'], $code);
+    header("Location: 2fa.php");
+    exit();
   }
 
-  // If not staff, check against students table
-  $sql = "SELECT * FROM students WHERE full_name=? AND email=?";
-  $stmt = $conn->prepare($sql);
+  // Check against students table
+  $sqlStudent = "SELECT * FROM students WHERE full_name=? AND email=?";
+  $stmt = $conn->prepare($sqlStudent);
   $stmt->bind_param("ss", $username, $email);
   $stmt->execute();
   $result = $stmt->get_result();
 
   if ($result->num_rows === 1) {
     $row = $result->fetch_assoc();
-    if (isset($row['password']) && password_verify($password, $row['password'])) {
-      session_start();
-      $_SESSION['username'] = $username;
-      $_SESSION['role'] = 'Student';
-      header("Location: ../student/student_index.php");
+
+    if (!isset($row['password']) || !password_verify($password, $row['password'])) {
+      echo "<script>alert('Invalid password'); window.location.href='../login.html';</script>";
       exit();
     }
+
+    // Generate 2FA code and store in session
+    $code = rand(100000, 999999);
+    $_SESSION['pending_2fa'] = [
+      'user_type' => 'Student',
+      'id' => $row['student_id'],
+      'username' => $row['full_name'],
+      'email' => $row['email'],
+      'code' => $code
+    ];
+
+    send2FACode($row['email'], $row['full_name'], $code);
+    header("Location: 2fa.php");
+    exit();
   }
 
+  // If no match found
   echo "<script>alert('Invalid login credentials'); window.location.href='../login.html';</script>";
   $stmt->close();
 }
