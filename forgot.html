@@ -80,12 +80,12 @@
     </div>
     <div class="forgot-title">Forgot Password</div>
     <a href="login.html" class="return-link">Return To Login Page</a>
-    <form>
-      <input type="email" placeholder="EMAIL" required />
-      <input type="password" placeholder="PASSWORD" required />
-      <input type="password" placeholder="CONFIRMED PASSWORD" required />
-      <button type="submit" class="create-btn">Create</button>
-    </form>
+<form method="POST" action="backend/send_code.php">
+  <input type="email" name="email" placeholder="EMAIL" required />
+  <button type="submit" class="create-btn">Send Code</button>
+</form>
+
+
   </div>
 </body>
 </html>

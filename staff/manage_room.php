@@ -196,6 +196,22 @@ td {
       </div>
     <div class="main-content">
       <div class="section-title">Room Overview</div>
+      <div style="margin-bottom: 20px; text-align: right;">
+  <a href="add_room.php">
+    <button style="
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    ">
+      + Add New Room
+    </button>
+  </a>
+</div>
 
       <table>
         <thead>
