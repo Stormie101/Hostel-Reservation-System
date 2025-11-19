@@ -84,7 +84,7 @@ $html = "
 <p>This report summarizes the hostel booking application submitted by <strong>{$data['full_name']}</strong>, a student enrolled in the <strong>{$data['program']}</strong> program at University Poly-Tech Malaysia (UPTM). The application was processed under reservation ID <strong>{$data['reservation_id']}</strong>.</p>
 
 <div class='section-title'>Student Profile</div>
-<p>The applicant, <strong>{$data['full_name']}</strong>, is registered under student ID <strong>{$data['student_id']}</strong>. She/He can be contacted via email at <strong>{$data['email']}</strong> or by phone at <strong>{$data['phone']}</strong>. Gender: <strong>{$data['gender']}</strong>.</p>
+<p>The applicant, <strong>{$data['full_name']}</strong>, is registered under student ID <strong>{$data['student_id']}</strong>. She/He can be contacted via email at <strong>{$data['email']}</strong> or by phone at <strong>{$data['phone']}</strong>.</p>
 
 <table>
   <tr><td><strong>Student ID</strong></td><td>{$data['student_id']}</td></tr>

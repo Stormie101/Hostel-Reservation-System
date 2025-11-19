@@ -47,7 +47,7 @@ body {
 }
 
 .header {
-  background-color: #004aad;
+  background-color: #73acf7ff;
   color: white;
   padding: 20px 40px;
   position: relative;

@@ -1,17 +1,19 @@
 <?php
-
 session_start();
 
 // Check if staff is logged in
 if (!isset($_SESSION['staff_username']) || !isset($_SESSION['staff_id'])) {
-  header("Location: ../login.html");
-  exit();
+    header("Location: ../login.html");
+    exit();
 }
 
 require_once '../connect.php';
 
 $sql = "SELECT room_id, room_number, room_type, is_occupied FROM rooms";
 $result = mysqli_query($conn, $sql);
+
+// Initialize the counter for the numbering system
+$counter = 1;
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +35,7 @@ body {
 }
 
 .header {
-  background-color: #004aad;
+  background-color: #73acf7ff;
   color: white;
   padding: 20px 40px;
   position: relative;
@@ -216,7 +218,7 @@ td {
       <table>
         <thead>
           <tr>
-            <th>Room Number</th>
+            <th>No.</th> <th>Room Number</th>
             <th>Room Type</th>
             <th>Status</th>
             <th>Actions</th>
@@ -225,7 +227,7 @@ td {
         <tbody>
 <?php while ($room = mysqli_fetch_assoc($result)): ?>
 <tr>
-  <td><?= $room['room_number'] ?></td>
+  <td><?= $counter ?></td> <td><?= $room['room_number'] ?></td>
   <td><?= $room['room_type'] ?></td>
   <td class="<?= $room['is_occupied'] ? 'status-occupied' : 'status-available' ?>">
     <?= $room['is_occupied'] ? 'Occupied' : 'Available' ?>
@@ -241,7 +243,10 @@ td {
     </div>
   </td>
 </tr>
-<?php endwhile; ?>
+<?php 
+  $counter++; // INCREMENT THE COUNTER
+  endwhile; 
+?>
 
         </tbody>
       </table>

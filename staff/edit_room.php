@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background-color: #f5f7fa;
     }
     .header {
-      background-color: #004aad;
+      background-color: #73acf7ff;
       color: white;
       padding: 20px 40px;
       position: relative;
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <select name="room_type" id="room_type" required>
               <option value="Single" <?= $room['room_type'] === 'Single' ? 'selected' : '' ?>>Single</option>
               <option value="Double" <?= $room['room_type'] === 'Double' ? 'selected' : '' ?>>Double</option>
-              <option value="Triple" <?= $room['room_type'] === 'Triple' ? 'selected' : '' ?>>Triple</option>
+              <option value="Block" <?= $room['room_type'] === 'Block' ? 'selected' : '' ?>>Block</option>
             </select>
           </div>
           <div class="form-group">

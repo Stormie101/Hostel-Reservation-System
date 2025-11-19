@@ -28,12 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'stormie8work@gmail.com'; 
-            $mail->Password = 'eyvj bsdh ihmk zypf';    
+            $mail->Username = 'kl2311015255@student.uptm.edu.my'; 
+            $mail->Password = 'piog qwzc zfgo cehi';    
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
-            $mail->setFrom('stormie8work@gmail.com', 'UPTM Hostel System');
+            $mail->setFrom('kl2311015255@student.uptm.edu.my', 'UPTM Hostel System');
             $mail->addAddress($email);
             $mail->isHTML(true);
             $mail->Subject = 'Your Password Reset Code';

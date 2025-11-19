@@ -1,31 +1,44 @@
 <?php
-
 session_start();
 
 // Check if staff is logged in
 if (!isset($_SESSION['staff_username']) || !isset($_SESSION['staff_id'])) {
-  header("Location: ../login.html");
-  exit();
+    header("Location: ../login.html");
+    exit();
 }
 
 require_once '../connect.php';
 
 $roomId = $_GET['room_id'] ?? null;
-if (!$roomId) exit('Invalid room ID');
+if (!$roomId) {
+    exit('Invalid room ID');
+}
 
-$sql = "SELECT room_id, room_number, room_type, is_occupied FROM rooms WHERE room_id = '$roomId' LIMIT 1";
-$result = mysqli_query($conn, $sql);
-$room = mysqli_fetch_assoc($result);
+// SECURE: Use prepared statements to prevent SQL Injection
+$stmt = $conn->prepare("SELECT room_id, room_number, room_type, is_occupied FROM rooms WHERE room_id = ? LIMIT 1");
+$stmt->bind_param("i", $roomId);
+$stmt->execute();
+$result = $stmt->get_result();
+$room = $result->fetch_assoc();
+$stmt->close();
+
+if (!$room) {
+    exit('Room not found');
+}
+
+// SECURE: Fetch student details using prepared statement
 $studentSql = "SELECT s.student_id, s.full_name, s.program, s.email, s.phone
                FROM reservations r
                JOIN students s ON r.student_id = s.student_id
-               WHERE r.room_id = '$roomId' AND r.status = 'Success'
+               WHERE r.room_id = ? AND r.status = 'Success'
                LIMIT 1";
+$stmt = $conn->prepare($studentSql);
+$stmt->bind_param("i", $roomId);
+$stmt->execute();
+$studentResult = $stmt->get_result();
+$student = $studentResult->fetch_assoc();
+$stmt->close();
 
-$studentResult = mysqli_query($conn, $studentSql);
-$student = mysqli_fetch_assoc($studentResult);
-
-if (!$room) exit('Room not found');
 ?>
 
 <!DOCTYPE html>
@@ -42,15 +55,19 @@ if (!$room) exit('Room not found');
       background-color: #f5f7fa;
     }
     .header {
-      background-color: #004aad;
+      background-color: #73acf7ff;
       color: white;
       padding: 20px 40px;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: 80px; /* Set consistent height */
     }
-    .header img { height: 70px; width: auto; }
+    .header img { 
+        height: 40px; /* <-- LOGO FIX */
+        width: auto; 
+    }
     .header-title {
       position: absolute;
       left: 50%;
@@ -94,28 +111,41 @@ if (!$room) exit('Room not found');
       padding: 40px;
     }
     .section-title {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
       margin-bottom: 20px;
       color: #004aad;
     }
-    .room-card {
+    
+    /* NEW: Card styles for displaying info */
+    .info-card {
       background-color: white;
-      padding: 30px;
+      padding: 30px 40px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      max-width: 600px;
+      max-width: 700px;
+      margin-bottom: 30px;
     }
-    .room-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 16px;
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: 200px 1fr; /* Label column and Value column */
+        gap: 16px;
+    }
+    
+    .info-item .label {
+      font-weight: 600;
+      color: #555;
+      font-size: 15px;
+    }
+    
+    .info-item .value {
+      font-weight: 500;
+      color: #111;
       font-size: 16px;
     }
-    .room-label {
-      font-weight: bold;
-      color: #555;
-    }
+
+    /* Re-using status badge styles */
     .status-badge {
       padding: 6px 12px;
       border-radius: 20px;
@@ -130,6 +160,20 @@ if (!$room) exit('Room not found');
     .status-available {
       background-color: #d4edda;
       color: #155724;
+    }
+    
+    .back-btn {
+        display: inline-block;
+        background-color: #6c757d;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    .back-btn:hover {
+        background-color: #5a6268;
     }
   </style>
 </head>
@@ -150,53 +194,53 @@ if (!$room) exit('Room not found');
 
     <div class="main-content">
       <div class="section-title">Room Information</div>
-      <div class="room-card">
-        <div class="room-row">
-          <div class="room-label">Room Number:</div>
-          <div><?= $room['room_number'] ?></div>
-        </div>
-        <div class="room-row">
-          <div class="room-label">Room Type:</div>
-          <div><?= $room['room_type'] ?></div>
-        </div>
-        <div class="room-row">
-          <div class="room-label">Occupancy Status:</div>
-          <div>
-            <span class="status-badge <?= $room['is_occupied'] ? 'status-occupied' : 'status-available' ?>">
-              <?= $room['is_occupied'] ? 'Occupied' : 'Available' ?>
-            </span>
-          </div>
-        </div>
-        <?php if ($student): ?>
-  <div class="section-title">Assigned Student</div>
-  <div class="room-card">
-    <div class="room-row">
-      <div class="room-label">Student ID:</div>
-      <div><?= $student['student_id'] ?></div>
-    </div>
-    <div class="room-row">
-      <div class="room-label">Name:</div>
-      <div><?= $student['full_name'] ?></div>
-    </div>
-    <div class="room-row">
-      <div class="room-label">Program:</div>
-      <div><?= $student['program'] ?></div>
-    </div>
-    <div class="room-row">
-      <div class="room-label">Email:</div>
-      <div><?= $student['email'] ?></div>
-    </div>
-    <div class="room-row">
-      <div class="room-label">Phone:</div>
-      <div><?= $student['phone'] ?></div>
-    </div>
-  </div>
-<?php else: ?>
-  <div class="section-title">Assigned Student</div>
-  <p>No student is currently assigned to this room.</p>
-<?php endif; ?>
+      <div class="info-card">
+        <div class="info-grid">
+            <div class="info-item label">Room Number:</div>
+            <div class="info-item value"><?= htmlspecialchars($room['room_number']) ?></div>
 
+            <div class="info-item label">Room Type:</div>
+            <div class="info-item value"><?= htmlspecialchars($room['room_type']) ?></div>
+
+            <div class="info-item label">Occupancy Status:</div>
+            <div class="info-item value">
+                <span class="status-badge <?= $room['is_occupied'] ? 'status-occupied' : 'status-available' ?>">
+                  <?= $room['is_occupied'] ? 'Occupied' : 'Available' ?>
+                </span>
+            </div>
+        </div>
       </div>
+
+      <!-- Conditionally show student info -->
+      <?php if ($student): ?>
+        <div class="section-title">Assigned Student</div>
+        <div class="info-card">
+            <div class="info-grid">
+                <div class="info-item label">Student ID:</div>
+                <div class="info-item value"><?= htmlspecialchars($student['student_id']) ?></div>
+                
+                <div class="info-item label">Name:</div>
+                <div class="info-item value"><?= htmlspecialchars($student['full_name']) ?></div>
+                
+                <div class="info-item label">Program:</div>
+                <div class="info-item value"><?= htmlspecialchars($student['program']) ?></div>
+                
+                <div class="info-item label">Email:</div>
+                <div class="info-item value"><?= htmlspecialchars($student['email']) ?></div>
+                
+                <div class="info-item label">Phone:</div>
+                <div class="info-item value"><?= htmlspecialchars($student['phone']) ?></div>
+            </div>
+        </div>
+      <?php else: ?>
+        <div class="section-title">Assigned Student</div>
+        <div class="info-card">
+            <p style="color: #555;">No student is currently assigned to this room.</p>
+        </div>
+      <?php endif; ?>
+      
+      <a href="manage_room.php" class="back-btn">Back to Room List</a>
+      
     </div>
   </div>
 </body>

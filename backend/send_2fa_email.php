@@ -12,13 +12,13 @@ function send2FACode($recipientEmail, $recipientName, $code) {
     $mail->isSMTP();
     $mail->Host       = 'smtp.gmail.com'; 
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'stormie8work@gmail.com';
-    $mail->Password   = 'ydtz gciv yicb haic'; 
+    $mail->Username   = 'kl2311015255@student.uptm.edu.my';
+    $mail->Password   = 'piog qwzc zfgo cehi'; 
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = 587;
 
     // Recipients
-    $mail->setFrom('stormie8work@gmail.com', 'UPTM Hostel System');
+    $mail->setFrom('kl2311015255@student.uptm.edu.my', 'UPTM Hostel System');
     $mail->addAddress($recipientEmail, $recipientName);
 
     // Content
